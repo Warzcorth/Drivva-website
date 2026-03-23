@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drivva Studio — The Drive Behind Legendary Brands</title>
+  <meta name="description" content="Drivva Studio is a UK-based branding agency specialising in brand identity, motion graphics, web design, social media design, and app development." />
+
+  <!-- =============================================
+       FONTS: Playfair Display (Google Fonts)
+       Helvetica Neue served via system stack
+  ============================================= -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =============================================
+       CSS CUSTOM PROPERTIES — DESIGN TOKENS
+    ============================================= */
+    :root {
+      --col-bg:       #09090b;
+      --col-surface:  #111113;
+      --col-border:   rgba(255,255,255,0.07);
+      --col-white:    #f5f5f0;
+      --col-accent:   #d4a847;
+      --col-accent2:  #c23b22;
+      --col-muted:    rgba(245,245,240,0.45);
+      --font-sans:    "HelveticaNeue","Helvetica Neue",Helvetica,Arial,sans-serif;
+      --font-serif:   "Playfair Display",Georgia,serif;
+      --section-pad:  clamp(80px,12vw,160px);
+      --ease-expo:    cubic-bezier(0.16,1,0.3,1);
+      --ease-inout:   cubic-bezier(0.65,0,0.35,1);
+    }
+
+    /* =============================================
+       RESET
+    ============================================= */
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    body{background:var(--col-bg);color:var(--col-white);font-family:var(--font-sans);overflow-x:hidden;cursor:none}
+
+    /* =============================================
+       CUSTOM CURSOR
+    ============================================= */
+    #cur-dot,#cur-ring{
+      position:fixed;top:0;left:0;border-radius:50%;pointer-events:none;
+      z-index:9999;transform:translate(-50%,-50%);transition:opacity .3s;
+    }
+    #cur-dot{width:8px;height:8px;background:var(--col-accent)}
+    #cur-ring{
+      width:38px;height:38px;
+      border:1.5px solid rgba(212,168,71,.5);
+      transition:width .3s,height .3s,border-color .3s;
+    }
+    .cursor-hover #cur-ring{width:58px;height:58px;border-color:var(--col-accent)}
+    .cursor-hover #cur-dot{transform:translate(-50%,-50%) scale(0)}
+
+    /* =============================================
+       GRAIN OVERLAY
+    ============================================= */
+    body::before{
+      content:"";position:fixed;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+      background-size:200px 200px;pointer-events:none;z-index:9990;opacity:.3;
+    }
+
+    /* =============================================
+       SCROLL PROGRESS
+    ============================================= */
+    #progress{
+      position:fixed;top:0;left:0;height:2px;width:0%;z-index:9998;
+      background:linear-gradient(90deg,var(--col-accent2),var(--col-accent));
+      transition:width .08s linear;
+    }
+
+    /* =============================================
+       NAV
+    ============================================= */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:1000;
+      padding:28px clamp(24px,6vw,80px);
+      display:flex;align-items:center;justify-content:space-between;
+      transition:background .4s var(--ease-inout),padding .4s,backdrop-filter .4s;
+    }
+    nav.scrolled{
+      background:rgba(9,9,11,.88);
+      backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+      padding-top:16px;padding-bottom:16px;
+      border-bottom:1px solid var(--col-border);
+    }
+    .nav-logo{
+      font-family:var(--font-sans);font-weight:700;font-size:1.05rem;
+      letter-spacing:.18em;text-transform:uppercase;color:var(--col-white);text-decoration:none;
+    }
+    .nav-logo em{
+      font-family:var(--font-serif);font-style:italic;font-weight:400;
+      color:var(--col-accent);text-transform:none;letter-spacing:0;
+    }
+    .nav-links{display:flex;align-items:center;gap:clamp(24px,4vw,48px);list-style:none}
+    .nav-links a{
+      font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;
+      color:var(--col-muted);text-decoration:none;transition:color .25s;position:relative;
+    }
+    .nav-links a::after{
+      content:"";position:absolute;bottom:-4px;left:0;width:0;height:1px;
+      background:var(--col-accent);transition:width .35s var(--ease-expo);
+    }
+    .nav-links a:hover{color:var(--col-white)}
+    .nav-links a:hover::after{width:100%}
+    .nav-cta{
+      font-size:.74rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+      color:var(--col-bg);background:var(--col-accent);padding:11px 24px;
+      border:none;text-decoration:none;display:inline-block;transition:background .3s;
+      clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+    }
+    .nav-cta:hover{background:var(--col-white)}
+
+    /* Hamburger */
+    .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:4px}
+    .hamburger span{display:block;width:26px;height:1.5px;background:var(--col-white);transition:transform .35s var(--ease-expo),opacity .3s}
+    .hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+    .hamburger.open span:nth-child(2){opacity:0}
+    .hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+    .mob-menu{
+      position:fixed;inset:0;background:rgba(9,9,11,.97);backdrop-filter:blur(24px);z-index:999;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px;
+      opacity:0;pointer-events:none;transition:opacity .4s var(--ease-inout);
+    }
+    .mob-menu.open{opacity:1;pointer-events:all}
+    .mob-menu a{
+      font-family:var(--font-serif);font-size:clamp(2rem,8vw,3.5rem);font-style:italic;
+      color:var(--col-white);text-decoration:none;transition:color .25s;
+    }
+    .mob-menu a:hover{color:var(--col-accent)}
+
+    /* =============================================
+       HERO
+    ============================================= */
+    .hero{
+      min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+      padding:0 clamp(24px,6vw,80px) clamp(60px,8vw,100px);
+      position:relative;overflow:hidden;
+    }
+    .hero-grid{
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+      background-size:80px 80px;pointer-events:none;
+    }
+    .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.2;pointer-events:none}
+    .orb1{width:600px;height:600px;background:var(--col-accent);top:-10%;right:-8%;animation:float 14s ease-in-out infinite alternate}
+    .orb2{width:440px;height:440px;background:var(--col-accent2);bottom:10%;left:-5%;animation:float 18s ease-in-out infinite alternate;animation-delay:-4s}
+    .orb3{width:280px;height:280px;background:var(--col-accent);top:40%;left:40%;opacity:.07;animation:float 22s ease-in-out infinite alternate;animation-delay:-9s}
+    @keyframes float{from{transform:translate(0,0) scale(1)}to{transform:translate(28px,-18px) scale(1.07)}}
+
+    .hero-eyebrow{
+      font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--col-accent);
+      margin-bottom:28px;display:flex;align-items:center;gap:14px;
+      opacity:0;transform:translateY(12px);animation:fadeup .8s var(--ease-expo) .3s forwards;
+    }
+    .hero-eyebrow::before{content:"";width:34px;height:1px;background:var(--col-accent);flex-shrink:0}
+
+    .hero-h1{
+      font-family:var(--font-sans);font-weight:700;
+      font-size:clamp(3.5rem,10.5vw,10.5rem);line-height:.93;
+      letter-spacing:-.035em;text-transform:uppercase;color:var(--col-white);position:relative;z-index:1;
+    }
+    .hero-h1 .serif-line{
+      font-family:var(--font-serif);font-weight:400;font-style:italic;text-transform:none;
+      color:var(--col-accent);display:block;font-size:.8em;letter-spacing:0;line-height:1.12;
+    }
+    /* Word-by-word clip reveal */
+    .word{display:inline-block;overflow:hidden;vertical-align:bottom}
+    .word span{display:inline-block;opacity:0;transform:translateY(110%);animation:wordrev .9s var(--ease-expo) forwards}
+    .word:nth-child(1) span{animation-delay:.5s}
+    .word:nth-child(2) span{animation-delay:.64s}
+    .word:nth-child(3) span{animation-delay:.78s}
+    .serif-line .word span{animation-delay:.95s}
+    @keyframes wordrev{to{opacity:1;transform:translateY(0)}}
+
+    .hero-bottom{
+      display:flex;align-items:flex-end;justify-content:space-between;gap:40px;
+      margin-top:48px;flex-wrap:wrap;
+      opacity:0;animation:fadeup .8s var(--ease-expo) 1.2s forwards;
+    }
+    .hero-tagline{
+      font-family:var(--font-serif);font-style:italic;
+      font-size:clamp(1rem,2vw,1.28rem);color:var(--col-muted);max-width:360px;line-height:1.65;
+    }
+    .hero-tagline em{font-style:normal;color:var(--col-white)}
+    .scroll-hint{display:flex;align-items:center;gap:12px;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--col-muted)}
+    .scroll-line{width:1px;height:56px;background:linear-gradient(to bottom,var(--col-accent),transparent);animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scaleY(1)}50%{opacity:.4;transform:scaleY(.6)}}
+
+    /* =============================================
+       UTILITIES
+    ============================================= */
+    section{padding:var(--section-pad) clamp(24px,6vw,80px);position:relative}
+
+    .label{
+      font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--col-accent);
+      display:flex;align-items:center;gap:12px;margin-bottom:32px;
+    }
+    .label::before{content:"";width:28px;height:1px;background:var(--col-accent)}
+
+    .s-head{
+      font-family:var(--font-sans);font-weight:700;
+      font-size:clamp(2.4rem,6vw,5.5rem);line-height:1;letter-spacing:-.03em;text-transform:uppercase;
+    }
+    .s-head .it{
+      font-family:var(--font-serif);font-weight:400;font-style:italic;text-transform:none;
+      letter-spacing:0;color:var(--col-accent);display:block;font-size:.85em;line-height:1.2;
+    }
+
+    /* Scroll reveal */
+    .r{opacity:0;transform:translateY(38px);transition:opacity .85s var(--ease-expo),transform .85s var(--ease-expo)}
+    .r.on{opacity:1;transform:translateY(0)}
+    .d1{transition-delay:.1s}.d2{transition-delay:.22s}.d3{transition-delay:.34s}
+    .d4{transition-delay:.46s}.d5{transition-delay:.58s}
+
+    @keyframes fadeup{to{opacity:1;transform:translateY(0)}}
+
+    /* =============================================
+       MARQUEE
+    ============================================= */
+    .marquee-wrap{padding:0;overflow:hidden;border-top:1px solid var(--col-border);border-bottom:1px solid var(--col-border)}
+    .marquee-track{display:flex;width:max-content;animation:mq 30s linear infinite}
+    .marquee-track:hover{animation-play-state:paused}
+    .mq-row{display:flex;align-items:center;white-space:nowrap}
+    .mq-item{
+      font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--col-muted);
+      padding:20px 48px;display:flex;align-items:center;gap:24px;
+    }
+    .mq-item::after{content:"✦";color:var(--col-accent);font-size:.55rem}
+    @keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* =============================================
+       ABOUT
+    ============================================= */
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(48px,8vw,120px);align-items:center}
+    .about-body{font-size:clamp(.9rem,1.3vw,1.06rem);line-height:1.8;color:var(--col-muted);margin-top:28px}
+    .about-body strong{color:var(--col-white);font-weight:600}
+    .cta-line{
+      display:inline-flex;align-items:center;gap:14px;margin-top:40px;
+      font-size:.76rem;letter-spacing:.18em;text-transform:uppercase;color:var(--col-white);
+      text-decoration:none;padding-bottom:8px;border-bottom:1px solid var(--col-accent);
+      transition:gap .3s var(--ease-expo),color .3s;
+    }
+    .cta-line:hover{gap:24px;color:var(--col-accent)}
+
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+    .stat{
+      background:var(--col-surface);border:1px solid var(--col-border);
+      padding:clamp(26px,4vw,48px) clamp(18px,3vw,34px);position:relative;overflow:hidden;
+      transition:border-color .3s,background .3s;
+    }
+    .stat:hover{border-color:rgba(212,168,71,.3);background:#16160f}
+    .stat::before{content:"";position:absolute;top:0;left:0;width:3px;height:0;background:var(--col-accent);transition:height .5s var(--ease-expo)}
+    .stat:hover::before{height:100%}
+    .stat-n{font-family:var(--font-serif);font-style:italic;font-size:clamp(2.6rem,5vw,4rem);color:var(--col-white);line-height:1;display:block}
+    .stat-l{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--col-muted);margin-top:8px;display:block}
+
+    /* =============================================
+       SERVICES
+    ============================================= */
+    .services-sect{background:var(--col-surface)}
+    .sv-header{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:clamp(48px,8vw,80px)}
+    .sv-sub{font-family:var(--font-serif);font-style:italic;font-size:clamp(1rem,1.4vw,1.18rem);color:var(--col-muted);line-height:1.7;align-self:end}
+
+    .sv-list{list-style:none}
+    .sv-item{
+      border-top:1px solid var(--col-border);
+      display:grid;grid-template-columns:2.5rem 1fr auto;align-items:center;gap:32px;
+      padding:36px 0;cursor:none;position:relative;overflow:hidden;transition:border-color .3s;
+    }
+    .sv-item:last-child{border-bottom:1px solid var(--col-border)}
+    .sv-item::before{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(90deg,transparent,rgba(212,168,71,.04));
+      transform:translateX(-100%);transition:transform .6s var(--ease-expo);
+    }
+    .sv-item:hover::before{transform:translateX(0)}
+    .sv-item:hover{border-color:rgba(212,168,71,.2)}
+    .sv-num{font-family:var(--font-serif);font-style:italic;font-size:.84rem;color:var(--col-accent);opacity:.7}
+    .sv-name{
+      font-family:var(--font-sans);font-weight:700;
+      font-size:clamp(1.2rem,3vw,2.3rem);letter-spacing:-.02em;text-transform:uppercase;
+      color:var(--col-white);transition:color .3s;
+    }
+    .sv-item:hover .sv-name{color:var(--col-accent)}
+    .sv-desc{font-size:.8rem;color:var(--col-muted);max-width:260px;line-height:1.6;display:none;margin-top:6px}
+    .sv-arr{font-size:1.4rem;color:var(--col-muted);transition:transform .4s var(--ease-expo),color .3s;z-index:1}
+    .sv-item:hover .sv-arr{transform:translateX(8px);color:var(--col-accent)}
+
+    /* =============================================
+       PROCESS
+    ============================================= */
+    .proc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:clamp(48px,6vw,72px)}
+    .proc-card{
+      background:var(--col-surface);border:1px solid var(--col-border);
+      padding:clamp(28px,4vw,44px) clamp(22px,3vw,30px);position:relative;overflow:hidden;
+      transition:background .35s,border-color .35s;
+    }
+    .proc-card::after{
+      content:"";position:absolute;bottom:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,var(--col-accent2),var(--col-accent));
+      transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease-expo);
+    }
+    .proc-card:hover{background:#14130e;border-color:rgba(212,168,71,.2)}
+    .proc-card:hover::after{transform:scaleX(1)}
+    .proc-step{font-family:var(--font-serif);font-style:italic;font-size:3.2rem;color:rgba(212,168,71,.13);line-height:1;margin-bottom:20px;transition:color .3s}
+    .proc-card:hover .proc-step{color:rgba(212,168,71,.32)}
+    .proc-title{font-weight:700;font-size:.86rem;letter-spacing:.12em;text-transform:uppercase;color:var(--col-white);margin-bottom:12px}
+    .proc-text{font-size:.8rem;line-height:1.7;color:var(--col-muted)}
+
+    /* =============================================
+       WORK / PORTFOLIO
+    ============================================= */
+    .port-header{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:clamp(40px,6vw,64px);flex-wrap:wrap}
+    .port-ext{
+      font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--col-muted);
+      text-decoration:none;display:flex;align-items:center;gap:10px;
+      padding-bottom:4px;border-bottom:1px solid var(--col-border);transition:color .3s,border-color .3s,gap .3s;
+    }
+    .port-ext:hover{color:var(--col-accent);border-color:var(--col-accent);gap:18px}
+
+    .port-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+    .port-card{
+      aspect-ratio:4/5;background:var(--col-surface);border:1px solid var(--col-border);
+      display:flex;flex-direction:column;justify-content:flex-end;padding:28px;
+      position:relative;overflow:hidden;cursor:none;text-decoration:none;transition:border-color .3s;
+    }
+    .port-card--wide{grid-column:span 2;aspect-ratio:16/9}
+    .port-card:hover{border-color:rgba(212,168,71,.35)}
+    .port-card::before{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(212,168,71,.06) 0%,transparent 60%);
+      opacity:0;transition:opacity .4s;
+    }
+    .port-card:hover::before{opacity:1}
+    .port-deco{
+      position:absolute;top:28px;right:28px;width:44px;height:44px;
+      border:1px solid var(--col-border);transform:rotate(45deg);
+      transition:border-color .3s,transform .6s var(--ease-expo);
+    }
+    .port-card:hover .port-deco{border-color:rgba(212,168,71,.45);transform:rotate(90deg) scale(1.1)}
+    .port-num{font-family:var(--font-serif);font-style:italic;font-size:.76rem;color:var(--col-accent);opacity:.7;margin-bottom:9px}
+    .port-title{font-family:var(--font-sans);font-weight:700;font-size:clamp(.95rem,1.8vw,1.35rem);letter-spacing:-.01em;text-transform:uppercase;color:var(--col-white);line-height:1.2}
+    .port-tag{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--col-muted);margin-top:7px}
+
+    /* =============================================
+       QUOTE
+    ============================================= */
+    .quote-sect{background:var(--col-surface);text-align:center}
+    .q-mark{font-family:var(--font-serif);font-size:clamp(5rem,14vw,13rem);line-height:.65;color:rgba(212,168,71,.1);display:block;margin-bottom:-16px}
+    .q-text{font-family:var(--font-serif);font-style:italic;font-size:clamp(1.4rem,3.5vw,2.9rem);line-height:1.42;color:var(--col-white);max-width:900px;margin:0 auto}
+    .q-text em{font-style:normal;color:var(--col-accent)}
+    .q-by{
+      font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;color:var(--col-muted);
+      margin-top:32px;display:flex;align-items:center;justify-content:center;gap:16px;
+    }
+    .q-by::before,.q-by::after{content:"";flex:1;max-width:80px;height:1px;background:var(--col-border)}
+
+    /* =============================================
+       CONTACT
+    ============================================= */
+    .ct-inner{display:grid;grid-template-columns:1fr 1fr;gap:clamp(48px,8vw,120px);align-items:start}
+    .ct-head{font-family:var(--font-sans);font-weight:700;font-size:clamp(2.2rem,5.5vw,5rem);line-height:1;letter-spacing:-.03em;text-transform:uppercase}
+    .ct-head .it{font-family:var(--font-serif);font-weight:400;font-style:italic;text-transform:none;color:var(--col-accent);display:block;letter-spacing:0}
+    .ct-body{font-size:.88rem;color:var(--col-muted);line-height:1.8;margin-top:24px}
+    .ct-details{margin-top:36px;display:flex;flex-direction:column;gap:18px}
+    .ct-row{display:flex;align-items:center;gap:16px;font-size:.82rem;color:var(--col-muted)}
+    .ct-icon{width:34px;height:34px;border:1px solid var(--col-border);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+    .ct-row a{color:var(--col-muted);text-decoration:none;transition:color .3s}
+    .ct-row a:hover{color:var(--col-accent)}
+
+    /* Form */
+    .ct-form{display:flex;flex-direction:column;gap:18px}
+    .f-grp{display:flex;flex-direction:column;gap:7px}
+    .f-label{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--col-muted)}
+    .f-input,.f-select,.f-ta{
+      background:var(--col-surface);border:1px solid var(--col-border);
+      color:var(--col-white);font-family:var(--font-sans);font-size:.88rem;
+      padding:13px 17px;outline:none;transition:border-color .3s;width:100%;-webkit-appearance:none;
+    }
+    .f-input:focus,.f-select:focus,.f-ta:focus{border-color:var(--col-accent)}
+    .f-input::placeholder,.f-ta::placeholder{color:rgba(245,245,240,.22)}
+    .f-ta{min-height:118px;resize:none}
+    .f-select option{background:var(--col-surface)}
+    .f-btn{
+      font-weight:700;font-size:.76rem;letter-spacing:.2em;text-transform:uppercase;
+      color:var(--col-bg);background:var(--col-accent);border:none;padding:17px 38px;
+      cursor:none;transition:background .3s;align-self:flex-start;
+      clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
+    }
+    .f-btn:hover{background:var(--col-white)}
+    #f-msg{font-size:.78rem;color:var(--col-accent);margin-top:4px;opacity:0;transition:opacity .4s}
+
+    /* =============================================
+       SOCIALS BAR
+    ============================================= */
+    .soc-bar{
+      padding:56px clamp(24px,6vw,80px);border-top:1px solid var(--col-border);
+      display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;
+    }
+    .soc-tag{font-family:var(--font-serif);font-style:italic;font-size:clamp(.9rem,1.3vw,1.08rem);color:var(--col-muted)}
+    .soc-links{display:flex;align-items:center;gap:16px;list-style:none;flex-wrap:wrap}
+    .soc-a{
+      display:flex;align-items:center;gap:10px;
+      font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+      color:var(--col-muted);text-decoration:none;
+      padding:10px 20px;border:1px solid var(--col-border);transition:color .3s,border-color .3s,background .3s;
+    }
+    .soc-a:hover{color:var(--col-bg);background:var(--col-accent);border-color:var(--col-accent)}
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer{
+      background:var(--col-surface);border-top:1px solid var(--col-border);
+      padding:clamp(40px,6vw,64px) clamp(24px,6vw,80px);
+      display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:48px;align-items:start;
+    }
+    .f-logo{
+      font-family:var(--font-sans);font-weight:700;font-size:1rem;letter-spacing:.18em;
+      text-transform:uppercase;color:var(--col-white);display:block;margin-bottom:14px;text-decoration:none;
+    }
+    .f-logo em{font-family:var(--font-serif);font-style:italic;font-weight:400;color:var(--col-accent);text-transform:none;letter-spacing:0}
+    .f-desc{font-size:.8rem;color:var(--col-muted);line-height:1.7;max-width:280px}
+    .f-col-t{font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--col-accent);margin-bottom:18px}
+    .f-ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+    .f-ul a{font-size:.8rem;color:var(--col-muted);text-decoration:none;transition:color .3s}
+    .f-ul a:hover{color:var(--col-accent)}
+    .f-btm{grid-column:1/-1;padding-top:28px;border-top:1px solid var(--col-border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+    .f-copy{font-size:.72rem;color:rgba(245,245,240,.28)}
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media(max-width:1024px){
+      .about-grid,.sv-header,.ct-inner{grid-template-columns:1fr}
+      .proc-grid{grid-template-columns:repeat(2,1fr)}
+      footer{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:768px){
+      .nav-links,.nav-cta{display:none}
+      .hamburger{display:flex}
+      .port-grid{grid-template-columns:1fr 1fr}
+      .port-card--wide{grid-column:span 2;aspect-ratio:4/3}
+      .stats{grid-template-columns:1fr 1fr}
+      .sv-item{grid-template-columns:2rem 1fr auto;gap:14px}
+    }
+    @media(max-width:540px){
+      .port-grid{grid-template-columns:1fr}
+      .port-card--wide{grid-column:span 1;aspect-ratio:4/3}
+      .proc-grid{grid-template-columns:1fr}
+      .hero-bottom{flex-direction:column;align-items:flex-start}
+      .soc-bar{flex-direction:column;align-items:flex-start}
+      footer{grid-template-columns:1fr}
+    }
+    @media(hover:none){
+      #cur-dot,#cur-ring{display:none}
+      body{cursor:auto}
+      .hamburger,.f-btn,.sv-item,.port-card{cursor:pointer}
+    }
+
+    /* =============================================
+       REVIEWS / TESTIMONIALS SECTION
+    ============================================= */
+
+    /* Section wrapper */
+    #reviews {
+      padding: var(--section-pad) 0;
+      background: var(--col-bg);
+      border-top: 1px solid var(--col-border);
+      overflow: hidden;
+    }
+
+    /* Header row — label + headline + aggregate score side by side */
+    .rv-header {
+      max-width: 1200px;
+      margin: 0 auto 72px;
+      padding: 0 clamp(24px,6vw,80px);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    /* Aggregate rating badge */
+    .rv-agg {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    .rv-agg-score {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--col-white);
+    }
+    .rv-agg-score span {
+      font-size: 0.45em;
+      color: var(--col-muted);
+      letter-spacing: 0;
+    }
+    .rv-agg-stars {
+      display: flex;
+      gap: 4px;
+    }
+    .rv-agg-stars svg {
+      width: 18px; height: 18px;
+    }
+    .rv-agg-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--col-muted);
+    }
+
+    /* ---- Card grid ---- */
+    .rv-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(24px,6vw,80px);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    /* Individual review card */
+    .rv-card {
+      background: var(--col-surface);
+      border: 1px solid var(--col-border);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.35s, transform 0.35s var(--ease-expo), box-shadow 0.35s;
+    }
+    .rv-card::before {
+      /* Subtle accent top border that slides in on hover */
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--col-accent);
+      transition: width 0.5s var(--ease-expo);
+    }
+    .rv-card:hover {
+      border-color: rgba(255,255,255,0.14);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .rv-card:hover::before { width: 100%; }
+
+    /* Featured / wide card */
+    .rv-card--wide {
+      grid-column: span 2;
+      background: linear-gradient(135deg, rgba(212,168,71,0.08) 0%, var(--col-surface) 50%);
+      border-color: rgba(212,168,71,0.2);
+    }
+    .rv-card--wide::before { background: var(--col-accent); }
+
+    /* Opening quote mark decorative */
+    .rv-quote-mark {
+      font-family: var(--font-serif);
+      font-size: 5rem;
+      line-height: 0.7;
+      color: var(--col-accent);
+      opacity: 0.25;
+      user-select: none;
+      position: absolute;
+      top: 20px; right: 24px;
+    }
+
+    /* Star row */
+    .rv-stars {
+      display: flex;
+      gap: 3px;
+    }
+    .rv-stars svg {
+      width: 14px; height: 14px;
+    }
+    .star-filled { fill: var(--col-accent); }
+    .star-empty  { fill: none; stroke: var(--col-muted); stroke-width: 1.5; }
+
+    /* Review body text */
+    .rv-text {
+      font-size: clamp(0.88rem, 1.2vw, 1rem);
+      line-height: 1.8;
+      color: rgba(245,245,240,0.7);
+      flex: 1;
+    }
+    .rv-card--wide .rv-text {
+      font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+      color: rgba(245,245,240,0.8);
+    }
+
+    /* Reviewer info row */
+    .rv-person {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-top: 1px solid var(--col-border);
+      padding-top: 20px;
+    }
+
+    /* Avatar circle — initials based */
+    .rv-avatar {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+      color: var(--col-bg);
+    }
+    /* Colour variants for avatars */
+    .av-gold   { background: var(--col-accent); }
+    .av-red    { background: var(--col-accent2); }
+    .av-white  { background: rgba(245,245,240,0.9); }
+    .av-green  { background: #4caf87; }
+    .av-blue   { background: #5b8dd9; }
+    .av-purple { background: #9b71d4; }
+
+    .rv-name {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      color: var(--col-white);
+    }
+    .rv-role {
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      color: var(--col-muted);
+      margin-top: 2px;
+    }
+
+    /* Service tag badge on card */
+    .rv-service-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--col-accent);
+      border: 1px solid rgba(212,168,71,0.25);
+      padding: 4px 10px;
+      border-radius: 2px;
+      align-self: flex-start;
+    }
+    .rv-service-tag::before {
+      content: "";
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--col-accent);
+    }
+
+    /* Bottom row — trust strip */
+    .rv-trust {
+      max-width: 1200px;
+      margin: 56px auto 0;
+      padding: 0 clamp(24px,6vw,80px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .rv-trust-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--col-muted);
+    }
+    .rv-trust-item svg {
+      width: 18px; height: 18px;
+      fill: var(--col-accent);
+      flex-shrink: 0;
+    }
+    .rv-trust-divider {
+      width: 1px; height: 28px;
+      background: var(--col-border);
+    }
+
+    /* Responsive */
+    @media(max-width:900px){
+      .rv-grid{ grid-template-columns: repeat(2,1fr); }
+      .rv-card--wide{ grid-column: span 2; }
+    }
+    @media(max-width:600px){
+      .rv-grid{ grid-template-columns: 1fr; }
+      .rv-card--wide{ grid-column: span 1; }
+      .rv-header{ align-items: flex-start; flex-direction: column; }
+      .rv-agg{ align-items: flex-start; }
+      .rv-trust{ gap: 24px; }
+      .rv-trust-divider{ display: none; }
+    }
+    /* =============================================
+       GALLERY — REAL IMAGE PORTFOLIO
+    ============================================= */
+
+    /* Project meta strip */
+    .proj-meta {
+      max-width: 1200px;
+      margin: 0 auto 60px;
+      padding: 24px clamp(24px,6vw,80px);
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      border: 1px solid var(--col-border);
+      background: var(--col-surface);
+    }
+    .proj-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0 32px;
+      flex: 1;
+      min-width: 140px;
+    }
+    .proj-meta-item:first-child { padding-left: 0; }
+    .proj-meta-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--col-accent);
+    }
+    .proj-meta-val {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--col-white);
+      letter-spacing: 0.02em;
+    }
+    .proj-meta-div {
+      width: 1px;
+      height: 40px;
+      background: var(--col-border);
+      flex-shrink: 0;
+    }
+
+    /* Gallery grid */
+    .gal-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(24px,6vw,80px);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    /* Gallery figure base */
+    .gal-item {
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+      background: var(--col-surface);
+      border: 1px solid var(--col-border);
+      /* Default aspect ratio */
+      aspect-ratio: 16/10;
+    }
+    /* Wide card — spans 2 cols */
+    .gal-wide { grid-column: span 2; aspect-ratio: 16/8; }
+    /* Tall card — spans 2 rows */
+    .gal-tall { grid-row: span 2; aspect-ratio: auto; }
+    /* Full width — spans all 3 cols */
+    .gal-full { grid-column: span 3; aspect-ratio: 21/9; }
+
+    /* Image inside */
+    .gal-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s cubic-bezier(0.16,1,0.3,1), filter 0.5s;
+      filter: brightness(0.92);
+    }
+    .gal-item:hover img {
+      transform: scale(1.04);
+      filter: brightness(1);
+    }
+    /* Focus ring for keyboard nav */
+    .gal-item:focus-visible {
+      outline: 2px solid var(--col-accent);
+      outline-offset: 3px;
+    }
+
+    /* Caption overlay */
+    .gal-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 20px 20px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+      transform: translateY(6px);
+      opacity: 0;
+      transition: opacity 0.4s, transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    .gal-item:hover .gal-caption,
+    .gal-item:focus-visible .gal-caption {
+      opacity: 1;
+      transform: none;
+    }
+    .gal-cat {
+      font-size: 0.6rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--col-accent);
+      background: rgba(212,168,71,0.12);
+      border: 1px solid rgba(212,168,71,0.3);
+      padding: 3px 8px;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+    .gal-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--col-white);
+      flex: 1;
+    }
+    .gal-zoom {
+      font-size: 1.1rem;
+      color: var(--col-white);
+      opacity: 0.7;
+      margin-left: auto;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .gal-item:hover .gal-zoom {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+
+    /* Gallery Behance CTA */
+    .gal-cta {
+      max-width: 1200px;
+      margin: 48px auto 0;
+      padding: 0 clamp(24px,6vw,80px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .gal-cta-text {
+      font-size: 0.9rem;
+      color: var(--col-muted);
+      font-family: var(--font-serif);
+      font-style: italic;
+    }
+    .gal-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--col-accent);
+      color: var(--col-bg);
+      padding: 14px 28px;
+      transition: background 0.3s, gap 0.3s;
+    }
+    .gal-cta-btn:hover { background: var(--col-white); gap: 16px; }
+
+    /* =============================================
+       LIGHTBOX
+    ============================================= */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.96);
+      z-index: 9800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    #lightbox.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    #lb-inner {
+      position: relative;
+      max-width: 90vw;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    #lb-img {
+      max-width: 90vw;
+      max-height: 80vh;
+      object-fit: contain;
+      display: block;
+      border-radius: 2px;
+      box-shadow: 0 40px 120px rgba(0,0,0,0.8);
+      transition: opacity 0.25s;
+    }
+    #lb-img.loading { opacity: 0; }
+
+    #lb-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    #lb-cat {
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--col-accent);
+      border: 1px solid rgba(212,168,71,0.3);
+      padding: 4px 10px;
+    }
+    #lb-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--col-white);
+      letter-spacing: 0.04em;
+    }
+    #lb-counter {
+      font-size: 0.7rem;
+      color: rgba(245,245,240,0.4);
+      letter-spacing: 0.1em;
+      margin-left: auto;
+    }
+
+    /* Close, prev, next buttons */
+    #lb-close, #lb-prev, #lb-next {
+      position: fixed;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--col-white);
+      cursor: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    #lb-close:hover, #lb-prev:hover, #lb-next:hover {
+      background: var(--col-accent);
+      color: var(--col-bg);
+      border-color: var(--col-accent);
+    }
+    #lb-close {
+      top: 24px; right: 28px;
+      width: 44px; height: 44px;
+      font-size: 1rem;
+      border-radius: 50%;
+    }
+    #lb-prev, #lb-next {
+      top: 50%; transform: translateY(-50%);
+      width: 48px; height: 48px;
+      font-size: 1.5rem;
+      line-height: 1;
+      border-radius: 2px;
+    }
+    #lb-prev { left: 24px; }
+    #lb-next { right: 24px; }
+    #lb-prev:hover { transform: translateY(-50%) translateX(-2px); }
+    #lb-next:hover { transform: translateY(-50%) translateX(2px); }
+
+    /* Responsive gallery */
+    @media(max-width:900px){
+      .gal-grid { grid-template-columns: repeat(2,1fr); }
+      .gal-wide  { grid-column: span 2; }
+      .gal-tall  { grid-row: span 1; aspect-ratio: 16/10; }
+      .gal-full  { grid-column: span 2; aspect-ratio: 16/9; }
+      .proj-meta { gap: 16px; }
+      .proj-meta-div { display: none; }
+    }
+    @media(max-width:540px){
+      .gal-grid { grid-template-columns: 1fr; gap: 10px; }
+      .gal-wide, .gal-tall, .gal-full { grid-column: span 1; aspect-ratio: 16/10; }
+      .gal-cta { flex-direction: column; align-items: flex-start; }
+      .gal-cta-btn { width: 100%; justify-content: center; }
+      #lb-prev { left: 10px; }
+      #lb-next { right: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<!-- Scroll progress -->
+<div id="progress"></div>
+
+<!-- ===========================================
+     NAV
+=========================================== -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Drivva <em>Agency</em></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Let's talk</a>
+  <button class="hamburger" id="ham" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mob-menu" id="mob">
+  <a href="#about"    class="ml">About</a>
+  <a href="#services" class="ml">Services</a>
+  <a href="#work"     class="ml">Work</a>
+  <a href="#reviews"  class="ml">Reviews</a>
+  <a href="#contact"  class="ml">Contact</a>
+</div>
+
+<!-- ===========================================
+     HERO
+=========================================== -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <p class="hero-eyebrow">UK Branding Agency &nbsp;·&nbsp; United Kingdom</p>
+
+  <h1 class="hero-h1">
+    <span class="word"><span>The&nbsp;</span></span>
+    <span class="word"><span>Drive&nbsp;</span></span>
+    <span class="word"><span>Behind</span></span>
+    <span class="serif-line"><span class="word"><span>Legendary Brands.</span></span></span>
+  </h1>
+
+  <div class="hero-bottom">
+    <p class="hero-tagline">
+      We craft identities that <em>command attention</em> — from brand strategy and motion to web &amp; app experiences.
+    </p>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================
+     MARQUEE
+=========================================== -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="mq-row">
+      <span class="mq-item">Brand Identity</span><span class="mq-item">Motion Graphics</span>
+      <span class="mq-item">Web Design</span><span class="mq-item">Social Media Design</span>
+      <span class="mq-item">App Development</span><span class="mq-item">Visual Strategy</span>
+      <span class="mq-item">Brand Identity</span><span class="mq-item">Motion Graphics</span>
+      <span class="mq-item">Web Design</span><span class="mq-item">Social Media Design</span>
+      <span class="mq-item">App Development</span><span class="mq-item">Visual Strategy</span>
+      <!-- duplicate for seamless loop -->
+      <span class="mq-item">Brand Identity</span><span class="mq-item">Motion Graphics</span>
+      <span class="mq-item">Web Design</span><span class="mq-item">Social Media Design</span>
+      <span class="mq-item">App Development</span><span class="mq-item">Visual Strategy</span>
+      <span class="mq-item">Brand Identity</span><span class="mq-item">Motion Graphics</span>
+      <span class="mq-item">Web Design</span><span class="mq-item">Social Media Design</span>
+      <span class="mq-item">App Development</span><span class="mq-item">Visual Strategy</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===========================================
+     ABOUT
+=========================================== -->
+<section id="about">
+  <div class="about-grid">
+    <div>
+      <p class="label r">Our Story</p>
+      <h2 class="s-head r d1">We Don't Just Design—<span class="it">We Build Legacies.</span></h2>
+      <p class="about-body r d2">Drivva Studio is a <strong>UK-based creative agency</strong> dedicated to crafting brands that people don't just recognise — they remember. We operate at the intersection of strategy, design, and technology to produce identities built to last.</p>
+      <p class="about-body r d3" style="margin-top:14px">Every brand we touch is treated as a <strong>long-term partner</strong>. We obsess over the details so you can focus on the bigger picture — from first pixel to final launch.</p>
+      <a href="https://www.behance.net/33e4d846" target="_blank" rel="noopener" class="cta-line r d4">View Our Portfolio <span>→</span></a>
+    </div>
+    <div class="stats r d2">
+      <div class="stat"><span class="stat-n" data-count="150" data-suffix="+">150+</span><span class="stat-l">Brands Elevated</span></div>
+      <div class="stat"><span class="stat-n" data-count="6"   data-suffix="+">6+</span><span class="stat-l">Years of Craft</span></div>
+      <div class="stat"><span class="stat-n" data-count="5"   data-suffix="">5</span><span class="stat-l">Core Services</span></div>
+      <div class="stat"><span class="stat-n">∞</span><span class="stat-l">Drive to Deliver</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================
+     SERVICES
+=========================================== -->
+<section id="services" class="services-sect">
+  <div class="sv-header">
+    <div>
+      <p class="label r">What We Do</p>
+      <h2 class="s-head r d1">Our <span class="it">Services</span></h2>
+    </div>
+    <p class="sv-sub r d2">Five disciplines. One relentless standard of excellence. Each service is engineered to build brands that dominate their space.</p>
+  </div>
+
+  <ul class="sv-list">
+    <li class="sv-item r">
+      <span class="sv-num">01</span>
+      <div><div class="sv-name">Brand Identity Design</div><div class="sv-desc">Logos, colour systems, typography, and the full visual language that makes your brand unmistakable.</div></div>
+      <span class="sv-arr">→</span>
+    </li>
+    <li class="sv-item r d1">
+      <span class="sv-num">02</span>
+      <div><div class="sv-name">Motion Graphics</div><div class="sv-desc">From animated logos to full-scale video content — we give your brand life, movement, and energy.</div></div>
+      <span class="sv-arr">→</span>
+    </li>
+    <li class="sv-item r d2">
+      <span class="sv-num">03</span>
+      <div><div class="sv-name">Web Design</div><div class="sv-desc">Beautiful, fast, and conversion-focused websites that represent your brand at its very best.</div></div>
+      <span class="sv-arr">→</span>
+    </li>
+    <li class="sv-item r d3">
+      <span class="sv-num">04</span>
+      <div><div class="sv-name">Social Media Design</div><div class="sv-desc">Scroll-stopping content systems, templates, and campaigns built for the feeds that matter.</div></div>
+      <span class="sv-arr">→</span>
+    </li>
+    <li class="sv-item r d4">
+      <span class="sv-num">05</span>
+      <div><div class="sv-name">App Development</div><div class="sv-desc">End-to-end mobile and web app builds where design precision meets engineering excellence.</div></div>
+      <span class="sv-arr">→</span>
+    </li>
+  </ul>
+</section>
+
+<!-- ===========================================
+     PROCESS
+=========================================== -->
+<section id="process">
+  <p class="label r">How We Work</p>
+  <h2 class="s-head r d1">Our <span class="it">Process</span></h2>
+  <div class="proc-grid">
+    <div class="proc-card r d1"><div class="proc-step">01</div><div class="proc-title">Discover</div><p class="proc-text">We dig deep — understanding your business, audience, and ambitions before a single line is drawn.</p></div>
+    <div class="proc-card r d2"><div class="proc-step">02</div><div class="proc-title">Strategise</div><p class="proc-text">We map out positioning, identity direction, and the visual language that will set you apart.</p></div>
+    <div class="proc-card r d3"><div class="proc-step">03</div><div class="proc-title">Create</div><p class="proc-text">Design, motion, and development merge as we build your brand with obsessive attention to detail.</p></div>
+    <div class="proc-card r d4"><div class="proc-step">04</div><div class="proc-title">Launch</div><p class="proc-text">We deliver, deploy, and hand over — then stay close to ensure your brand performs in the wild.</p></div>
+  </div>
+</section>
+
+<!-- ===========================================
+     PORTFOLIO — REAL IMAGE GALLERY
+=========================================== -->
+<section id="work">
+
+  <!-- Header -->
+  <div class="port-header">
+    <div>
+      <p class="label r">Selected Work</p>
+      <h2 class="s-head r d1">Case Study: <span class="it">Dominion Stitches</span></h2>
+    </div>
+    <a href="https://www.behance.net/33e4d846" target="_blank" rel="noopener noreferrer" class="port-ext r d2">View full portfolio on Behance →</a>
+  </div>
+
+  <!-- Project meta strip -->
+  <div class="proj-meta r">
+    <div class="proj-meta-item"><span class="proj-meta-label">Client</span><span class="proj-meta-val">Dominion Stitches</span></div>
+    <div class="proj-meta-div"></div>
+    <div class="proj-meta-item"><span class="proj-meta-label">Scope</span><span class="proj-meta-val">Brand Identity · Web Design · App</span></div>
+    <div class="proj-meta-div"></div>
+    <div class="proj-meta-item"><span class="proj-meta-label">Industry</span><span class="proj-meta-val">Fashion &amp; Luxury</span></div>
+    <div class="proj-meta-div"></div>
+    <div class="proj-meta-item"><span class="proj-meta-label">Deliverables</span><span class="proj-meta-val">Full Brand System</span></div>
+  </div>
+
+  <!-- ── GALLERY GRID ── -->
+  <div class="gal-grid">
+
+    <!-- Row 1: Hero wide + tall -->
+    <figure class="gal-item gal-wide r" data-index="0" data-title="Logo & Wordmark" data-cat="Brand Identity" tabindex="0" role="button" aria-label="View Dominion Stitches logo design">
+      <img src="Artboard_5_copy.png" alt="Dominion Stitches logo on dark background" loading="lazy" />
+      <figcaption class="gal-caption">
+        <span class="gal-cat">Brand Identity</span>
+        <span class="gal-name">Logo &amp; Wordmark</span>
+        <span class="gal-zoom" aria-hidden="true">⤢</span>
+      </figcaption>
+    </figure>
+
+    <figure class="gal-item gal-tall r d1" data-index="10" data-title="Brand Packaging" data-cat="Brand Identity" tabindex="0" role="button" aria-label="View Dominion Stitches brand packaging">
+      <img src="Artboard_21.png" alt="Dominion Stitches brand shopping bag" loading="lazy" />
+      <figcaption class="gal-caption">
+        <span class="gal-cat">Brand Identity</span>
+        <span class="gal-name">Brand Packaging</span>
+        <span class="gal-zoom" aria-hidden="true">⤢</span>
+      </figcaption>
+    </figure>
+
+    <!-- Row 2: Three even -->
+    <figure class="gal-item r d1" data-index="1" data-title="Colour Palette System" data-cat="Brand Identity" tabindex="0" role="button" aria-label="View colour palette">
+      <img src="Artboard_8.png" alt="Brand colour palette with purple, black, red and more" loading="lazy" />
+      <figcaption class="gal-caption">
+        <span class="gal-cat">Brand Identity</span>
+        <span class="gal-name">Colour Palette</span>
+        <span class="gal-zoom" aria-hidden="true">⤢</span>
+      </figcaption>
+    </figure>
+
+    <figure class="gal-item r d2" data-index="4" data-title="Typography System" data-cat="Brand Identity" tabindex="0" role="button" aria-label="View typography system">
+      <img src="Artboard_13.png" alt="Helvetica Narrow Roman typography specimen" loading="lazy" />
+      <figcaption class="gal-caption">
+        <span class="gal-cat">Brand Identity</span>
+        <span class="gal-name">Typography System</span>
+        <span class="gal-zoom" aria-hidden="true">⤢</span>
+      </figcaption>
+    </figure>
+
+    <figure class="gal-item r d3" data-index="7" data-title="App Icon Preview" data-cat="App Design" tabindex="0" role="button" aria-label="View app icon preview">
+      <img src="Artboard_17.png" alt="Dominion Stitches app icon on iPhone" loading="lazy" />
+      <figcaption class="gal-caption">
+        <span class="gal-cat">App Design</span>
+        <span class="gal-name">App Icon Preview</span>
+        <span class="gal-zoom" aria-hidden="true">⤢</span>
+      </figcaption>
+    </figure>
+
+    <!-- Row 3: Billboard wide + square -->
+    <figure class="gal-item gal-wide r d2" data-index="2" data-title="Billboard Campaign" data-cat="Brand Identity" tabindex="0" role="button" aria-label="View billboard campaign mockup">
+      <img src="Artboard_9.png" alt="Dominion Stitches billboard in underground station" loading="lazy" />
+      <figcaption class="gal-caption">
+        <span class="gal-cat">Brand Identity</span>
+        <span class="gal-name">Billboard Campaign</span>
+        <span class="gal-zoom" aria-hidden="true">⤢</span>
+      </figcaption>
+    </figure>
+
+    <figure class="gal-item r d3" data-index="9" data-title="Multi-Device Mockup" data-cat="Web Design" tabindex="0" role="button" aria-label="View multi-device responsive mockup">
+      <img src="Artboard_19.png" alt="Dominion Stitches on iPad and iPhone" loading="lazy" />
+      <figcaption class="gal-caption">
+        <span class="gal-cat">Web Design</span>
+        <span class="gal-name">Responsive Design</span>
+        <span class="gal-zoom" aria-hidden="true">⤢</span>
+      </figcaption>
+    </figure>
+
+    <!-- Row 4: Three even devices -->
+    <figure class="gal-item r d2" data-index="3" data-title="Laptop Mockup Dark" data-cat="Web Design" tabindex="0" role="button" aria-label="View laptop mockup dark version">
+      <img src="Artboard_12.png" alt="Dominion Stitches website on MacBook dark" loading="lazy" />
+      <figcaption class="gal-caption">
+        <span class="gal-cat">Web Design</span>
+        <span class="gal-name">Website — Dark Edition</span>
+        <span class="gal-zoom" aria-hidden="true">⤢</span>
+      </figcaption>
+    </figure>
+
+    <figure class="gal-item r d3" data-index="5" data-title="Tablet Design" data-cat="Web Design" tabindex="0" role="button" aria-label="View tablet design mockup">
+      <img src="Artboard_15.png" alt="Dominion Stitches on iPad with Apple Pencil" loading="lazy" />
+      <figcaption class="gal-caption">
+        <span class="gal-cat">Web Design</span>
+        <span class="gal-name">Tablet Experience</span>
+        <span class="gal-zoom" aria-hidden="true">⤢</span>
+      </figcaption>
+    </figure>
+
+    <figure class="gal-item r d4" data-index="6" data-title="Mobile Design" data-cat="Web Design" tabindex="0" role="button" aria-label="View mobile design mockup">
+      <img src="Artboard_16.png" alt="Dominion Stitches on iPhone hand mockup" loading="lazy" />
+      <figcaption class="gal-caption">
+        <span class="gal-cat">Web Design</span>
+        <span class="gal-name">Mobile Experience</span>
+        <span class="gal-zoom" aria-hidden="true">⤢</span>
+      </figcaption>
+    </figure>
+
+    <!-- Row 5: Full-width laptop light -->
+    <figure class="gal-item gal-full r d3" data-index="8" data-title="Laptop Mockup Light" data-cat="Web Design" tabindex="0" role="button" aria-label="View laptop light version mockup">
+      <img src="Artboard_18.png" alt="Dominion Stitches e-commerce website on MacBook light" loading="lazy" />
+      <figcaption class="gal-caption">
+        <span class="gal-cat">Web Design</span>
+        <span class="gal-name">E-Commerce Website</span>
+        <span class="gal-zoom" aria-hidden="true">⤢</span>
+      </figcaption>
+    </figure>
+
+  </div><!-- /.gal-grid -->
+
+  <!-- Behance CTA -->
+  <div class="gal-cta r">
+    <p class="gal-cta-text">This is one of many projects. See the full body of work on Behance.</p>
+    <a href="https://www.behance.net/33e4d846" target="_blank" rel="noopener noreferrer" class="gal-cta-btn">
+      View All Projects on Behance
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 13L13 1M13 1H4M13 1V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+
+</section>
+
+<!-- ── LIGHTBOX OVERLAY ── -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Image lightbox" aria-hidden="true">
+  <button id="lb-close" aria-label="Close lightbox">✕</button>
+  <button id="lb-prev" aria-label="Previous image">‹</button>
+  <button id="lb-next" aria-label="Next image">›</button>
+  <div id="lb-inner">
+    <img id="lb-img" src="" alt="" />
+    <div id="lb-info">
+      <span id="lb-cat"></span>
+      <span id="lb-title"></span>
+      <span id="lb-counter"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ===========================================
+     QUOTE
+=========================================== -->
+<section class="quote-sect">
+  <span class="q-mark r">"</span>
+  <blockquote class="q-text r d1">
+    Great brands aren't built overnight — they're built with <em>intention, consistency,</em> and the relentless drive to be unforgettable.
+  </blockquote>
+  <p class="q-by r d2">Drivva Studio — United Kingdom</p>
+</section>
+
+<!-- ===========================================
+     REVIEWS / TESTIMONIALS
+=========================================== -->
+<section id="reviews" aria-label="Client reviews">
+
+  <!-- Section header -->
+  <div class="rv-header">
+    <div>
+      <p class="label r">Client Reviews</p>
+      <h2 class="s-head r d1">What Our <span class="it">Clients Say</span></h2>
+    </div>
+
+    <!-- Aggregate score -->
+    <div class="rv-agg r d2" aria-label="Average rating 5 out of 5">
+      <div class="rv-agg-score">5.0<span>/5</span></div>
+      <div class="rv-agg-stars" aria-hidden="true">
+        <!-- 5 filled stars -->
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+      </div>
+      <div class="rv-agg-label">Based on 40+ projects</div>
+    </div>
+  </div>
+
+  <!-- Review cards grid -->
+  <div class="rv-grid">
+
+    <!-- Card 1 — WIDE / Featured -->
+    <article class="rv-card rv-card--wide r" aria-label="Review from Marcus Oyelaran">
+      <div class="rv-quote-mark" aria-hidden="true">"</div>
+      <span class="rv-service-tag">Brand Identity Design</span>
+      <div class="rv-stars" aria-label="5 out of 5 stars">
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+      </div>
+      <p class="rv-text">Drivva Studio completely transformed our brand. We came in with a vague idea of who we were, and they handed us back a fully realised identity — logo, typography, colour, tone — everything was so intentional and precise. Clients now comment on our branding before anything else. The ROI has been extraordinary.</p>
+      <div class="rv-person">
+        <div class="rv-avatar av-gold" aria-hidden="true">MO</div>
+        <div>
+          <div class="rv-name">Marcus Oyelaran</div>
+          <div class="rv-role">Founder, Apex Ventures — London, UK</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card 2 -->
+    <article class="rv-card r d1" aria-label="Review from Sophia Adewale">
+      <div class="rv-quote-mark" aria-hidden="true">"</div>
+      <span class="rv-service-tag">Web Design</span>
+      <div class="rv-stars" aria-label="5 out of 5 stars">
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+      </div>
+      <p class="rv-text">The website they built for us was beyond what I imagined. Fast, beautiful, and it actually converts visitors. The attention to mobile experience was incredible — our bounce rate dropped 40% within the first month.</p>
+      <div class="rv-person">
+        <div class="rv-avatar av-blue" aria-hidden="true">SA</div>
+        <div>
+          <div class="rv-name">Sophia Adewale</div>
+          <div class="rv-role">CEO, Luminary Skincare — Manchester, UK</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card 3 -->
+    <article class="rv-card r d1" aria-label="Review from Daniel Ferreira">
+      <div class="rv-quote-mark" aria-hidden="true">"</div>
+      <span class="rv-service-tag">Motion Graphics</span>
+      <div class="rv-stars" aria-label="5 out of 5 stars">
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+      </div>
+      <p class="rv-text">Our animated brand reveal was fire. Drivva delivered something that had our whole team speechless at the first viewing. The motion work elevated our launch campaign to a completely different league.</p>
+      <div class="rv-person">
+        <div class="rv-avatar av-red" aria-hidden="true">DF</div>
+        <div>
+          <div class="rv-name">Daniel Ferreira</div>
+          <div class="rv-role">Creative Director, Nova Labs — Bristol, UK</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card 4 -->
+    <article class="rv-card r d2" aria-label="Review from Amara Nwosu">
+      <div class="rv-quote-mark" aria-hidden="true">"</div>
+      <span class="rv-service-tag">Social Media Design</span>
+      <div class="rv-stars" aria-label="5 out of 5 stars">
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+      </div>
+      <p class="rv-text">Our Instagram engagement tripled after Drivva overhauled our content templates. The consistency and quality of every post now reflects the premium brand we always wanted to be. Worth every penny.</p>
+      <div class="rv-person">
+        <div class="rv-avatar av-green" aria-hidden="true">AN</div>
+        <div>
+          <div class="rv-name">Amara Nwosu</div>
+          <div class="rv-role">Marketing Manager, Zuri Cosmetics — Birmingham, UK</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card 5 -->
+    <article class="rv-card r d2" aria-label="Review from James Whitfield">
+      <div class="rv-quote-mark" aria-hidden="true">"</div>
+      <span class="rv-service-tag">App Development</span>
+      <div class="rv-stars" aria-label="5 out of 5 stars">
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+      </div>
+      <p class="rv-text">From wireframe to live app, Drivva's process was seamless. They understood our product vision immediately and pushed it further than we imagined. The final UX is something our users genuinely rave about.</p>
+      <div class="rv-person">
+        <div class="rv-avatar av-purple" aria-hidden="true">JW</div>
+        <div>
+          <div class="rv-name">James Whitfield</div>
+          <div class="rv-role">Product Lead, Fieldr App — Leeds, UK</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Card 6 -->
+    <article class="rv-card r d3" aria-label="Review from Priya Sharma">
+      <div class="rv-quote-mark" aria-hidden="true">"</div>
+      <span class="rv-service-tag">Brand Identity Design</span>
+      <div class="rv-stars" aria-label="5 out of 5 stars">
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+        <svg viewBox="0 0 20 20"><polygon points="10,1 12.9,7 19.5,7.6 14.5,12 16.2,18.5 10,15 3.8,18.5 5.5,12 0.5,7.6 7.1,7" class="star-filled"/></svg>
+      </div>
+      <p class="rv-text">I've worked with three other agencies before Drivva. The difference is night and day. They bring genuine strategic thinking to every creative decision — not just pretty visuals, but purposeful ones.</p>
+      <div class="rv-person">
+        <div class="rv-avatar av-white" aria-hidden="true">PS</div>
+        <div>
+          <div class="rv-name">Priya Sharma</div>
+          <div class="rv-role">Co-Founder, Kinn Studio — London, UK</div>
+        </div>
+      </div>
+    </article>
+
+  </div><!-- /.rv-grid -->
+
+  <!-- Trust strip -->
+  <div class="rv-trust r d4" aria-label="Trust indicators">
+    <div class="rv-trust-item">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" fill="none" stroke="currentColor" stroke-width="2" style="fill:none;stroke:var(--col-accent)"/></svg>
+      100% Client Satisfaction
+    </div>
+    <div class="rv-trust-divider" aria-hidden="true"></div>
+    <div class="rv-trust-item">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+      5.0 Average Rating
+    </div>
+    <div class="rv-trust-divider" aria-hidden="true"></div>
+    <div class="rv-trust-item">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+      40+ Brands Elevated
+    </div>
+    <div class="rv-trust-divider" aria-hidden="true"></div>
+    <div class="rv-trust-item">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
+      UK-Based &amp; Global Reach
+    </div>
+  </div>
+
+</section>
+
+<!-- ===========================================
+     CONTACT
+=========================================== -->
+<section id="contact">
+  <div class="ct-inner">
+    <div>
+      <p class="label r">Get In Touch</p>
+      <h2 class="ct-head r d1">Start Your <span class="it">Brand Journey.</span></h2>
+      <p class="ct-body r d2">Ready to build something legendary? Tell us about your project and let's create a brand that drives results — and turns heads.</p>
+      <div class="ct-details r d3">
+        <div class="ct-row"><div class="ct-icon">📍</div><span>United Kingdom</span></div>
+        <div class="ct-row"><div class="ct-icon">✦</div><a href="https://www.behance.net/33e4d846" target="_blank" rel="noopener">Behance Portfolio</a></div>
+        <div class="ct-row"><div class="ct-icon">◻</div><a href="https://www.facebook.com/share/1DnK35TN3g/?mibextid=wwXIfr" target="_blank" rel="noopener">Facebook</a></div>
+        <div class="ct-row"><div class="ct-icon">◯</div><a href="https://www.instagram.com/drivvastudio?igsh=MWh1aWhoaTRzeHk4bg%3D%3D&utm_source=qr" target="_blank" rel="noopener">@drivvastudio</a></div>
+      </div>
+    </div>
+
+    <div class="r d2">
+      <form class="ct-form" id="ctform" action="https://formspree.io/f/xbdzvjqy" method="POST" novalidate>
+        <div class="f-grp">
+          <label class="f-label" for="fn">Full Name</label>
+          <input class="f-input" id="fn" type="text" placeholder="Your name" required />
+        </div>
+        <div class="f-grp">
+          <label class="f-label" for="fe">Email Address</label>
+          <input class="f-input" id="fe" type="email" placeholder="your@email.com" required />
+        </div>
+        <div class="f-grp">
+          <label class="f-label" for="fs">Service Needed</label>
+          <select class="f-select" id="fs">
+            <option value="" disabled selected>Select a service</option>
+            <option>Brand Identity Design</option>
+            <option>Motion Graphics</option>
+            <option>Web Design</option>
+            <option>Social Media Design</option>
+            <option>App Development</option>
+            <option>Multiple / Not Sure</option>
+          </select>
+        </div>
+        <div class="f-grp">
+          <label class="f-label" for="fm">Your Project</label>
+          <textarea class="f-ta" id="fm" placeholder="Describe your brand goals, timeline, and any relevant details..." required></textarea>
+        </div>
+        <button class="f-btn" type="submit">Send Message →</button>
+        <p id="f-msg"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================================
+     SOCIAL BAR
+=========================================== -->
+<div class="soc-bar">
+  <p class="soc-tag">Follow our creative journey</p>
+  <ul class="soc-links">
+    <li><a href="https://www.behance.net/33e4d846" target="_blank" rel="noopener" class="soc-a"><span>✦</span> Behance</a></li>
+    <li><a href="https://www.facebook.com/share/1DnK35TN3g/?mibextid=wwXIfr" target="_blank" rel="noopener" class="soc-a"><span>◻</span> Facebook</a></li>
+    <li><a href="https://www.instagram.com/drivvastudio?igsh=MWh1aWhoaTRzeHk4bg%3D%3D&utm_source=qr" target="_blank" rel="noopener" class="soc-a"><span>◯</span> Instagram</a></li>
+  </ul>
+</div>
+
+<!-- ===========================================
+     FOOTER
+=========================================== -->
+<footer>
+  <div>
+    <a href="#" class="f-logo">Drivva <em>Studio</em></a>
+    <p class="f-desc">The drive behind legendary brands. A UK creative agency crafting identities that endure.</p>
+  </div>
+  <div>
+    <p class="f-col-t">Services</p>
+    <ul class="f-ul">
+      <li><a href="#services">Brand Identity Design</a></li>
+      <li><a href="#services">Motion Graphics</a></li>
+      <li><a href="#services">Web Design</a></li>
+      <li><a href="#services">Social Media Design</a></li>
+      <li><a href="#services">App Development</a></li>
+    </ul>
+  </div>
+  <div>
+    <p class="f-col-t">Connect</p>
+    <ul class="f-ul">
+      <li><a href="https://www.behance.net/33e4d846" target="_blank" rel="noopener">Behance</a></li>
+      <li><a href="https://www.facebook.com/share/1DnK35TN3g/?mibextid=wwXIfr" target="_blank" rel="noopener">Facebook</a></li>
+      <li><a href="https://www.instagram.com/drivvastudio?igsh=MWh1aWhoaTRzeHk4bg%3D%3D&utm_source=qr" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href="#contact">Contact Us</a></li>
+    </ul>
+  </div>
+  <div class="f-btm">
+    <span class="f-copy">© 2026 Drivva Studio. All rights reserved.</span>
+    <span class="f-copy">🇬🇧 Based in the United Kingdom</span>
+  </div>
+</footer>
+
+<!-- ===========================================
+     JAVASCRIPT
+=========================================== -->
+<script>
+/* --------------------------------------------------
+   CUSTOM CURSOR
+-------------------------------------------------- */
+const dot  = document.getElementById("cur-dot");
+const ring = document.getElementById("cur-ring");
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener("mousemove", e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + "px";
+  dot.style.top  = my + "px";
+});
+(function animRing() {
+  rx += (mx - rx) * 0.13;
+  ry += (my - ry) * 0.13;
+  ring.style.left = rx + "px";
+  ring.style.top  = ry + "px";
+  requestAnimationFrame(animRing);
+})();
+document.addEventListener("mouseleave", () => { dot.style.opacity = 0; ring.style.opacity = 0; });
+document.addEventListener("mouseenter", () => { dot.style.opacity = 1; ring.style.opacity = 1; });
+
+// Hover class on interactive elements
+document.querySelectorAll("a,button,.sv-item,.port-card").forEach(el => {
+  el.addEventListener("mouseenter", () => document.body.classList.add("cursor-hover"));
+  el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-hover"));
+});
+
+/* --------------------------------------------------
+   SCROLL PROGRESS
+-------------------------------------------------- */
+const prog = document.getElementById("progress");
+const navbar = document.getElementById("nav");
+window.addEventListener("scroll", () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  prog.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + "%";
+  navbar.classList.toggle("scrolled", window.scrollY > 60);
+}, { passive: true });
+
+/* --------------------------------------------------
+   HAMBURGER
+-------------------------------------------------- */
+const ham = document.getElementById("ham");
+const mob = document.getElementById("mob");
+ham.addEventListener("click", () => {
+  const o = ham.classList.toggle("open");
+  mob.classList.toggle("open", o);
+  document.body.style.overflow = o ? "hidden" : "";
+});
+document.querySelectorAll(".ml").forEach(a => {
+  a.addEventListener("click", () => {
+    ham.classList.remove("open"); mob.classList.remove("open");
+    document.body.style.overflow = "";
+  });
+});
+
+/* --------------------------------------------------
+   SCROLL REVEAL (IntersectionObserver)
+-------------------------------------------------- */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("on"); obs.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: "0px 0px -36px 0px" });
+document.querySelectorAll(".r").forEach(el => obs.observe(el));
+
+/* --------------------------------------------------
+   SERVICE DESC HOVER REVEAL
+-------------------------------------------------- */
+document.querySelectorAll(".sv-item").forEach(item => {
+  const desc = item.querySelector(".sv-desc");
+  if (!desc) return;
+  item.addEventListener("mouseenter", () => {
+    desc.style.display = "block";
+    desc.style.opacity = "0"; desc.style.transform = "translateY(6px)";
+    requestAnimationFrame(() => {
+      desc.style.transition = "opacity .35s, transform .35s";
+      desc.style.opacity = "1"; desc.style.transform = "translateY(0)";
+    });
+  });
+  item.addEventListener("mouseleave", () => {
+    desc.style.opacity = "0"; desc.style.transform = "translateY(6px)";
+    setTimeout(() => { desc.style.display = "none"; }, 280);
+  });
+});
+
+/* --------------------------------------------------
+   HERO PARALLAX ON MOUSE
+-------------------------------------------------- */
+const h1 = document.querySelector(".hero-h1");
+document.addEventListener("mousemove", e => {
+  if (!h1) return;
+  const dx = (e.clientX - window.innerWidth / 2) / window.innerWidth;
+  const dy = (e.clientY - window.innerHeight / 2) / window.innerHeight;
+  h1.style.transform = `translate(${dx * 9}px,${dy * 5}px)`;
+});
+
+/* --------------------------------------------------
+   PORTFOLIO CARD TILT
+-------------------------------------------------- */
+document.querySelectorAll(".port-card").forEach(c => {
+  c.addEventListener("mousemove", e => {
+    const r = c.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    c.style.transform = `perspective(800px) rotateY(${x*6}deg) rotateX(${-y*4}deg) scale(1.02)`;
+  });
+  c.addEventListener("mouseleave", () => { c.style.transform = ""; });
+});
+
+/* --------------------------------------------------
+   STAT COUNT-UP
+-------------------------------------------------- */
+const statObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el  = e.target.querySelector(".stat-n");
+    const cnt = parseInt(el.dataset.count);
+    const sfx = el.dataset.suffix || "";
+    if (!cnt) return;
+    const start = performance.now();
+    const dur = 1600;
+    (function step(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 4);
+      el.textContent = Math.floor(eased * cnt) + (p >= 1 ? sfx : "");
+      if (p < 1) requestAnimationFrame(step);
+    })(start);
+    statObs.unobserve(e.target);
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll(".stat").forEach(s => statObs.observe(s));
+
+/* --------------------------------------------------
+   CONTACT FORM
+-------------------------------------------------- */
+document.getElementById("ctform").addEventListener("submit", async e => {
+  e.preventDefault();
+  const n = document.getElementById("fn").value.trim();
+  const em = document.getElementById("fe").value.trim();
+  const msg = document.getElementById("fm").value.trim();
+  const fb = document.getElementById("f-msg");
+  if (!n || !em || !msg) {
+    fb.textContent = "Please fill in all required fields.";
+    fb.style.color = "#c23b22"; fb.style.opacity = "1"; return;
+  }
+  fb.textContent = "Sending…";
+  fb.style.color = "var(--col-muted)"; fb.style.opacity = "1";
+  try {
+    const formData = {
+      name:    document.getElementById("fn").value.trim(),
+      email:   document.getElementById("fe").value.trim(),
+      message: document.getElementById("fm").value.trim()
+    };
+    const res = await fetch("https://formspree.io/f/xbdzvjqy", {
+      method: "POST",
+      headers: { "Accept": "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
+    });
+    if (res.ok) {
+      fb.textContent = "Message received! We'll be in touch very soon.";
+      fb.style.color = "var(--col-accent)";
+      e.target.reset();
+      setTimeout(() => { fb.style.opacity = "0"; }, 5000);
+    } else {
+      fb.textContent = "Something went wrong. Please try again or email us directly.";
+      fb.style.color = "#c23b22";
+    }
+  } catch {
+    fb.textContent = "Network error. Please check your connection and try again.";
+    fb.style.color = "#c23b22";
+  }
+});
+
+/* --------------------------------------------------
+   SMOOTH ANCHOR SCROLL (offset for nav)
+-------------------------------------------------- */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener("click", function(e) {
+    const id = this.getAttribute("href");
+    if (id === "#") return;
+    const t = document.querySelector(id);
+    if (!t) return;
+    e.preventDefault();
+    window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 80, behavior: "smooth" });
+  });
+});
+
+/* --------------------------------------------------
+   LIGHTBOX — Gallery image viewer
+   Opens on click/Enter on any .gal-item
+   Keyboard: Escape=close, ←/→=navigate
+-------------------------------------------------- */
+(function initLightbox() {
+  const lb       = document.getElementById("lightbox");
+  const lbImg    = document.getElementById("lb-img");
+  const lbCat    = document.getElementById("lb-cat");
+  const lbTitle  = document.getElementById("lb-title");
+  const lbCount  = document.getElementById("lb-counter");
+  const btnClose = document.getElementById("lb-close");
+  const btnPrev  = document.getElementById("lb-prev");
+  const btnNext  = document.getElementById("lb-next");
+
+  // Collect all gallery items in DOM order
+  const items = Array.from(document.querySelectorAll(".gal-item"));
+  let current = 0;
+
+  // Map index → { src, title, cat }
+  function getItemData(el) {
+    return {
+      src:   el.querySelector("img").src,
+      alt:   el.querySelector("img").alt,
+      title: el.dataset.title || "",
+      cat:   el.dataset.cat   || "",
+    };
+  }
+
+  function openAt(idx) {
+    current = (idx + items.length) % items.length;
+    const d = getItemData(items[current]);
+
+    // Fade out, swap src, fade in
+    lbImg.classList.add("loading");
+    const newImg = new Image();
+    newImg.onload = () => {
+      lbImg.src = d.src;
+      lbImg.alt = d.alt;
+      lbImg.classList.remove("loading");
+    };
+    newImg.src = d.src;
+
+    lbCat.textContent   = d.cat;
+    lbTitle.textContent = d.title;
+    lbCount.textContent = (current + 1) + " / " + items.length;
+
+    lb.classList.add("open");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    btnClose.focus();
+  }
+
+  function close() {
+    lb.classList.remove("open");
+    lb.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+  }
+
+  // Attach click to each gallery item
+  items.forEach((el, idx) => {
+    el.addEventListener("click",   () => openAt(idx));
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openAt(idx); }
+    });
+  });
+
+  // Controls
+  btnClose.addEventListener("click", close);
+  btnPrev.addEventListener("click",  () => openAt(current - 1));
+  btnNext.addEventListener("click",  () => openAt(current + 1));
+
+  // Click backdrop to close
+  lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+
+  // Keyboard navigation
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("open")) return;
+    if (e.key === "Escape")      close();
+    if (e.key === "ArrowLeft")   openAt(current - 1);
+    if (e.key === "ArrowRight")  openAt(current + 1);
+  });
+
+  // Touch swipe support
+  let touchStartX = 0;
+  lb.addEventListener("touchstart", (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener("touchend",   (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) diff > 0 ? openAt(current + 1) : openAt(current - 1);
+  });
+})();
+</script>
+</body>
+</html>
